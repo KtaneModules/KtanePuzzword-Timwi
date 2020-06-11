@@ -1,7 +1,9 @@
 ﻿namespace ProperPassword
 {
-    static class Words
+    static class Data
     {
+        public static readonly int[] Primes = new[] { 2, 3, 5, 7, 11, 13, 17, 19, 23 };
+        public static readonly int[] Squares = new[] { 1, 4, 9, 16, 25 };
         public static readonly string[] AllWords =
         {
             "ABACUS",
