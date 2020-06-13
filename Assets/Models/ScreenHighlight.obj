@@ -1,0 +1,14 @@
+o ScreenHighlight
+v 0.9 0 0.9
+v 0.9 0 -0.9
+v 1 0 -1
+v 1 0 1
+v -0.9 0 0.9
+v -1 0 1
+v -0.9 0 -0.9
+v -1 0 -1
+g ScreenHighlight
+f 1 2 3 4
+f 5 1 4 6
+f 7 5 6 8
+f 2 7 8 3

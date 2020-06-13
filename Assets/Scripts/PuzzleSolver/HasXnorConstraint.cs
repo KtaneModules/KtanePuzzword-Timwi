@@ -29,9 +29,9 @@ namespace PuzzleSolvers
                 else
                 {
                     if (grid[i].Value + minValue == Value1)
-                        found1 = true;
+                        possible1 = found1 = true;
                     if (grid[i].Value + minValue == Value2)
-                        found2 = true;
+                        possible2 = found2 = true;
                     if (found1 && found2)
                         return Enumerable.Empty<Constraint>();
                 }
@@ -41,7 +41,7 @@ namespace PuzzleSolvers
             if (remainingCellCount == 1)
             {
                 for (var v = 0; v < takens[remainingCell].Length; v++)
-                    if ((found1 && v + minValue != Value2) || (found2 && v + minValue != Value1))
+                    if ((found1 && v + minValue != Value2) || (found2 && v + minValue != Value1) || (!found1 && !found2 && (v + minValue == Value1 || v + minValue == Value2)))
                         takens[remainingCell][v] = true;
                 return Enumerable.Empty<Constraint>();
             }
