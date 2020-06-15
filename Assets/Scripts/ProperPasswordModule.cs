@@ -18,6 +18,8 @@ public class ProperPasswordModule : MonoBehaviour
     public KMBombModule Module;
     public KMAudio Audio;
     public GameObject[] Screens;
+    public MeshRenderer StatusScreen;
+    public GameObject StatusSquare;
     public MeshRenderer[] ScreenBacks;
     public TextMesh[] InputLetters;
     public TextMesh WaitMessage;
@@ -27,6 +29,10 @@ public class ProperPasswordModule : MonoBehaviour
     public Material ScreenInput;
     public Material ScreenWrong;
     public Material ScreenSolved;
+    public Material StatusScreenNormal;
+    public Material StatusScreenInput;
+    public Material StatusScreenWrong;
+    public Material StatusScreenSolved;
     public Texture[] Symbols;
     public KMSelectable NextButton;
     public KMSelectable[] InputButtons;
@@ -83,6 +89,8 @@ public class ProperPasswordModule : MonoBehaviour
     {
         foreach (var scr in ScreenBacks)
             scr.sharedMaterial = ScreenNormal;
+        StatusScreen.sharedMaterial = StatusScreenNormal;
+        StatusSquare.SetActive(false);
         for (var i = 0; i < 6; i++)
             InputLetters[i].gameObject.SetActive(false);
         WaitMessage.text = "Stand by...,Working...,Initializing...,Please wait...,Booting up...,Calculating...,Processing...,Hang on...,Preparing...,Starting...,Loading...,Launching...".Split(',').PickRandom();
@@ -98,9 +106,10 @@ public class ProperPasswordModule : MonoBehaviour
         return delegate
         {
             NextButton.AddInteractionPunch();
-            Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, NextButton.transform);
+            Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, InputButtons[i].transform);
             if (!_threadReady || _isSolved)
                 return false;
+            Audio.PlaySoundAtTransform("blip", transform);
             if (_solveSubmit != null)
                 StopCoroutine(_solveSubmit);
             if (_curSubmission[i] != _lastLetter)
@@ -110,6 +119,7 @@ public class ProperPasswordModule : MonoBehaviour
             InputLetters[i].gameObject.SetActive(true);
             InputLetters[i].text = _curSubmission[i].ToString();
             ScreenBacks[i + 1].sharedMaterial = ScreenInput;
+            StatusScreen.sharedMaterial = StatusScreenInput;
             foreach (var obj in dyn[i + 1])
                 Destroy(obj);
             dyn[i + 1].Clear();
@@ -120,7 +130,16 @@ public class ProperPasswordModule : MonoBehaviour
 
     private IEnumerator delayedSubmit()
     {
-        yield return new WaitForSeconds(5f);
+        const float duration = 5f;
+        var elapsed = 0f;
+        while (elapsed < duration)
+        {
+            StatusSquare.transform.localPosition = new Vector3(0, 0, 0);
+            StatusSquare.transform.localRotation = Quaternion.identity;
+            StatusSquare.transform.localScale = new Vector3(.4f, .825f * (1 - elapsed / duration), 1);
+            yield return null;
+            elapsed += Time.deltaTime;
+        }
         foreach (var list in dyn)
         {
             foreach (var obj in list)
@@ -137,6 +156,8 @@ public class ProperPasswordModule : MonoBehaviour
                 InputLetters[i].gameObject.SetActive(true);
                 InputLetters[i].text = _solution[i].ToString();
             }
+            StatusScreen.sharedMaterial = StatusScreenWrong;
+            StatusSquare.SetActive(false);
 
             Debug.LogFormat(@"[Proper Password #{0}] You entered: {1}. Strike!", _moduleId, input);
             _threadReady = false;
@@ -147,7 +168,10 @@ public class ProperPasswordModule : MonoBehaviour
         {
             foreach (var scr in ScreenBacks)
                 scr.sharedMaterial = ScreenSolved;
+            StatusScreen.sharedMaterial = StatusScreenSolved;
+            StatusSquare.SetActive(false);
             Debug.LogFormat(@"[Proper Password #{0}] Module solved!", _moduleId);
+            Audio.PlaySoundAtTransform("blip3", transform);
             Module.HandlePass();
             _isSolved = true;
         }
@@ -178,11 +202,13 @@ public class ProperPasswordModule : MonoBehaviour
 
     private void setPage(int page)
     {
+        Audio.PlaySoundAtTransform("blip2", transform);
         WaitMessage.gameObject.SetActive(false);
         if (_solveSubmit != null)
             StopCoroutine(_solveSubmit);
         foreach (var scr in ScreenBacks)
             scr.sharedMaterial = ScreenNormal;
+        StatusScreen.sharedMaterial = StatusScreenNormal;
         foreach (var txt in InputLetters)
             txt.gameObject.SetActive(false);
         for (var i = 0; i < 6; i++)
@@ -195,6 +221,10 @@ public class ProperPasswordModule : MonoBehaviour
         var numPages = Math.Max((smallScreenClues.Count + 5) / 6, wideScreenClues.Count);
 
         _curPage = page % numPages;
+        StatusSquare.SetActive(true);
+        StatusSquare.transform.localPosition = new Vector3(0, numPages == 1 ? 0 : _curPage == 0 ? .225f : -.225f, 0);
+        StatusSquare.transform.localRotation = Quaternion.identity;
+        StatusSquare.transform.localScale = new Vector3(.4f, numPages == 1 ? .825f : .375f, 1f);
 
         for (var screen = 0; screen < 7; screen++)
         {
@@ -205,7 +235,7 @@ public class ProperPasswordModule : MonoBehaviour
             if (screen > 0 && 6 * _curPage + screen - 1 >= smallScreenClues.Count)
                 continue;
             var clue = screen == 0 ? wideScreenClues[_curPage] : smallScreenClues[6 * _curPage + screen - 1];
-            Debug.LogFormat("<Proper Password #{0}> Screen {1}: {2} ({3})", _moduleId, screen, clue.Type, clue.Values.Join(", "));
+            //Debug.LogFormat("<Proper Password #{0}> Screen {1}: {2} ({3})", _moduleId, screen, clue.Type, clue.Values.Join(", "));
             var layout = Array.IndexOf(_layouts[clue.GetLayoutType()], clue.Type);
             switch (clue.Type.GetLayoutType())
             {
@@ -301,7 +331,7 @@ public class ProperPasswordModule : MonoBehaviour
             cnst /= 4;
         }
         if (base4.Length < 2)
-            base4.PadLeft(2, '0');
+            base4 = base4.PadLeft(2, '0');
 
         var totalWidth = base4.Sum(ch => ch < '2' ? .5f : 1f);
         var x = -totalWidth * .5f;
