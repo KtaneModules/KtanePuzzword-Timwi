@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace PuzzleSolvers
 {
     /// <summary>Can be used to describe any constraint that applies to the whole puzzle using a lambda expression.</summary>
-    public sealed class TwoCellLambdaConstraint : Constraint
+    sealed class TwoCellLambdaConstraint : Constraint
     {
         /// <summary>A function that determines whether a pair of values is valid in the relevant cells.</summary>
         public Func<int, int, bool> IsValid { get; private set; }

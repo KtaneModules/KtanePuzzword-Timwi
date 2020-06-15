@@ -4,7 +4,7 @@ using System.Linq;
 namespace PuzzleSolvers
 {
     /// <summary>Abstract base class for all constraints in a puzzle.</summary>
-    public abstract class Constraint
+    abstract class Constraint
     {
         /// <summary>The group of cells affected by this constraint, or <c>null</c> if it affects all of them.</summary>
         public int[] AffectedCells { get; private set; }

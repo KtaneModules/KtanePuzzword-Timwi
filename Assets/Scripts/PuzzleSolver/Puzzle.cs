@@ -5,7 +5,7 @@ using System.Linq;
 namespace PuzzleSolvers
 {
     /// <summary>Encapsulates a puzzle.</summary>
-    public sealed class Puzzle
+    sealed class Puzzle
     {
         /// <summary>
         ///     The number of cells to be filled in this puzzle.</summary>
