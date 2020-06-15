@@ -3,7 +3,6 @@ using System.Linq;
 
 namespace PuzzleSolvers
 {
-    // Unused — too slow
     sealed class HasXnorConstraint : Constraint
     {
         public int Value1 { get; private set; }
