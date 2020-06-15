@@ -371,27 +371,6 @@ public class ProperPasswordModule : MonoBehaviour
             Debug.LogFormat(@"[Proper Password #{0}] Clue {1} has {2} values instead of expected {3}. Please report this bug to Timwi.", _moduleId, clue.Type, clue.Values.Length, expectedNumValues);
     }
 
-    IEnumerator ProcessTwitchCommand(string command)
-    {
-        if (command == "m")
-        {
-            foreach (var del in dyn[1])
-                Destroy(del);
-            var g = new GameObject("Symbol");
-            g.transform.parent = Screens[1].transform;
-            g.transform.localPosition = new Vector3(0, 0, _z);
-            g.transform.localRotation = Quaternion.identity;
-            g.transform.localScale = new Vector3(.7f, .7f, .7f);
-            var mf = g.AddComponent<MeshFilter>();
-            mf.sharedMesh = Quad;
-            var mr = g.AddComponent<MeshRenderer>();
-            mr.sharedMaterial = SymbolMaterial;
-            mr.material.mainTexture = Symbols[0];
-        }
-
-        yield break;
-    }
-
     void GeneratePuzzle(int seed)
     {
         var words = Data.AllWords;
