@@ -1672,6 +1672,7 @@
             "GARISH",
             "GARLIC",
             "GARNER",
+            "GARNET",
             "GARTER",
             "GASKET",
             "GASPED",
