@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using PuzzleSolvers;
 
@@ -24,7 +23,7 @@ namespace Puzzword
         public static Clue ModuloDiff2(int i, int j, int modulo) { return new Clue(new[] { i, j, modulo }, ClueType.ModuloDiff2, new TwoCellLambdaConstraint(i, j, (a, b) => a % modulo == b % modulo)); }
         public static Clue Modulo2(int i, int j, int modulo) { return new Clue(new[] { i, j, modulo }, ClueType.Modulo2, new TwoCellLambdaConstraint(i, j, (a, b) => b != 0 && a % b == modulo)); }
         public static Clue Between2(int i, int j, int value) { return new Clue(new[] { i, j, value }, ClueType.Between2, new TwoCellLambdaConstraint(i, j, (a, b) => (a < value && value < b) || (b < value && value < a))); }
-        public static Clue LessThan(int i, int j) { return new Clue(new[] { i, j }, ClueType.LessThan, new TwoCellLambdaConstraint(i, j, (a, b) => a < b)); }
+        public static Clue LessThan(int i, int j) { return new Clue(new[] { j, i }, ClueType.LessThan, new TwoCellLambdaConstraint(i, j, (a, b) => a < b)); }
         public static Clue ConcatenationDivisible(int i, int j, int m) { return new Clue(new[] { i, j, m }, ClueType.ConcatenationDivisible, new TwoCellLambdaConstraint(i, j, (a, b) => int.Parse(a.ToString() + b.ToString()) % m == 0)); }
         public static Clue ConcatenationNotDivisible(int i, int j, int m) { return new Clue(new[] { i, j, m }, ClueType.ConcatenationNotDivisible, new TwoCellLambdaConstraint(i, j, (a, b) => int.Parse(a.ToString() + b.ToString()) % m != 0)); }
         public static Clue Sum3(int i, int j, int k) { return new Clue(new[] { i, j, k }, ClueType.Sum3, new ThreeCellLambdaConstraint(i, j, k, (a, b, c) => a + b == c)); }
