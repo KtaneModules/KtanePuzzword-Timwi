@@ -328,7 +328,7 @@ public class PuzzwordModule : MonoBehaviour
             base4 = (cnst % 4) + base4;
             cnst /= 4;
         }
-        if (base4.Length < 2)
+        if (base4.Length < 2 && (display == ConstantDisplay.InsideVert))
             base4 = base4.PadLeft(2, '0');
 
         var totalWidth = base4.Sum(ch => ch < '2' ? .5f : 1f);
