@@ -52,6 +52,7 @@ public class PuzzwordModule : MonoBehaviour
     private bool _isSolved = false;
     private int _curPage = 0;
     private Coroutine _solveSubmit;
+    private Coroutine _delayedReset;
     private readonly char?[] _curSubmission = new char?[6];
     private char _lastLetter = 'A';
 
@@ -80,11 +81,6 @@ public class PuzzwordModule : MonoBehaviour
         for (var i = 0; i < InputButtons.Length; i++)
             InputButtons[i].OnInteract = InputButtonPress(i);
 
-        ResetModule();
-    }
-
-    private void ResetModule()
-    {
         foreach (var scr in ScreenBacks)
             scr.sharedMaterial = ScreenNormal;
         StatusScreen.sharedMaterial = StatusScreenNormal;
@@ -152,15 +148,14 @@ public class PuzzwordModule : MonoBehaviour
             {
                 ScreenBacks[i + 1].sharedMaterial = ScreenWrong;
                 InputLetters[i].gameObject.SetActive(true);
-                InputLetters[i].text = _solution[i].ToString();
+                InputLetters[i].text = (_curSubmission[i] ?? '?').ToString();
             }
             StatusScreen.sharedMaterial = StatusScreenWrong;
             StatusSquare.SetActive(false);
 
             Debug.LogFormat(@"[Puzzword #{0}] You entered: {1}. Strike!", _moduleId, input);
-            _threadReady = false;
             Module.HandleStrike();
-            StartCoroutine(delayedReset());
+            _delayedReset = StartCoroutine(delayedReset());
         }
         else
         {
@@ -178,11 +173,17 @@ public class PuzzwordModule : MonoBehaviour
     private IEnumerator delayedReset()
     {
         yield return new WaitForSeconds(3f);
-        ResetModule();
+        _delayedReset = null;
+        setPage(0);
     }
 
     private bool NextButtonPress()
     {
+        if (_delayedReset != null)
+        {
+            StopCoroutine(_delayedReset);
+            _delayedReset = null;
+        }
         NextButton.AddInteractionPunch();
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, NextButton.transform);
         if (!_threadReady || _isSolved)
@@ -541,8 +542,6 @@ public class PuzzwordModule : MonoBehaviour
 
         if (req.Count(c => c.GetScreenType() == ScreenType.Wide) > 2 || req.Count(c => c.GetScreenType() == ScreenType.Narrow) > 12)
             goto tryAgain;
-
-        Thread.Sleep(2000);
 
         _puzzle = req;
         _solution = solutionWord;
