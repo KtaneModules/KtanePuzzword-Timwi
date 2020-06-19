@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PuzzleSolvers;
 
-namespace ProperPassword
+namespace Puzzword
 {
     struct Clue
     {

@@ -3,16 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using ProperPassword;
+using Puzzword;
 using PuzzleSolvers;
 using UnityEngine;
 using Rnd = UnityEngine.Random;
 
 /// <summary>
-/// On the Subject of Proper Password
+/// On the Subject of Puzzword
 /// Created by Timwi
 /// </summary>
-public class ProperPasswordModule : MonoBehaviour
+public class PuzzwordModule : MonoBehaviour
 {
     public KMBombInfo Bomb;
     public KMBombModule Module;
@@ -39,8 +39,6 @@ public class ProperPasswordModule : MonoBehaviour
 
     private static int _moduleIdCounter = 1;
     private int _moduleId;
-    private const float _z = -.0001f;
-
     private const int _min = 1;  // inclusive
     private const int _max = 26; // inclusive
     private const int _numLetters = 6;   // negotiable
@@ -96,7 +94,7 @@ public class ProperPasswordModule : MonoBehaviour
         WaitMessage.text = "Stand by...,Working...,Initializing...,Please wait...,Booting up...,Calculating...,Processing...,Hang on...,Preparing...,Starting...,Loading...,Launching...".Split(',').PickRandom();
         WaitMessage.gameObject.SetActive(true);
         var seed = Rnd.Range(0, int.MaxValue);
-        Debug.LogFormat(@"<Proper Password #{0}> Puzzle seed: {1}", _moduleId, seed);
+        Debug.LogFormat(@"<Puzzword #{0}> Puzzle seed: {1}", _moduleId, seed);
         new Thread(() => GeneratePuzzle(seed)).Start();
         StartCoroutine(waitForThread());
     }
@@ -159,7 +157,7 @@ public class ProperPasswordModule : MonoBehaviour
             StatusScreen.sharedMaterial = StatusScreenWrong;
             StatusSquare.SetActive(false);
 
-            Debug.LogFormat(@"[Proper Password #{0}] You entered: {1}. Strike!", _moduleId, input);
+            Debug.LogFormat(@"[Puzzword #{0}] You entered: {1}. Strike!", _moduleId, input);
             _threadReady = false;
             Module.HandleStrike();
             StartCoroutine(delayedReset());
@@ -170,7 +168,7 @@ public class ProperPasswordModule : MonoBehaviour
                 scr.sharedMaterial = ScreenSolved;
             StatusScreen.sharedMaterial = StatusScreenSolved;
             StatusSquare.SetActive(false);
-            Debug.LogFormat(@"[Proper Password #{0}] Module solved!", _moduleId);
+            Debug.LogFormat(@"[Puzzword #{0}] Module solved!", _moduleId);
             Audio.PlaySoundAtTransform("blip3", transform);
             Module.HandlePass();
             _isSolved = true;
@@ -196,7 +194,7 @@ public class ProperPasswordModule : MonoBehaviour
     private IEnumerator waitForThread()
     {
         yield return new WaitUntil(() => _threadReady);
-        Debug.LogFormat(@"[Proper Password #{0}] Solution: {1}", _moduleId, _solution);
+        Debug.LogFormat(@"[Puzzword #{0}] Solution: {1}", _moduleId, _solution);
         setPage(0);
     }
 
@@ -235,7 +233,7 @@ public class ProperPasswordModule : MonoBehaviour
             if (screen > 0 && 6 * _curPage + screen - 1 >= smallScreenClues.Count)
                 continue;
             var clue = screen == 0 ? wideScreenClues[_curPage] : smallScreenClues[6 * _curPage + screen - 1];
-            //Debug.LogFormat("<Proper Password #{0}> Screen {1}: {2} ({3})", _moduleId, screen, clue.Type, clue.Values.Join(", "));
+            //Debug.LogFormat("<Puzzword #{0}> Screen {1}: {2} ({3})", _moduleId, screen, clue.Type, clue.Values.Join(", "));
             var layout = Array.IndexOf(_layouts[clue.GetLayoutType()], clue.Type);
             switch (clue.Type.GetLayoutType())
             {
@@ -319,8 +317,8 @@ public class ProperPasswordModule : MonoBehaviour
             scale: new Vector3(.125f, .125f, .125f));
         var inner = createObject(screen, "Constant-inner", outer,
             pos: new Vector3(0,
-                display == ConstantDisplay.InsideHorizUp || display == ConstantDisplay.InsideVertRight ? .5f :
-                display == ConstantDisplay.InsideHorizDown || display == ConstantDisplay.InsideVertLeft ? -.5f :
+                display == ConstantDisplay.InsideHorizUp || display == ConstantDisplay.InsideVertRight ? 1 :
+                display == ConstantDisplay.InsideHorizDown || display == ConstantDisplay.InsideVertLeft ? -1 :
                 display == ConstantDisplay.InsideHoriz || display == ConstantDisplay.InsideVert ? 0 : 2.9f,
                 0));
 
@@ -368,7 +366,7 @@ public class ProperPasswordModule : MonoBehaviour
     private void assertValues(Clue clue, int expectedNumValues)
     {
         if (clue.Values.Length != expectedNumValues)
-            Debug.LogFormat(@"[Proper Password #{0}] Clue {1} has {2} values instead of expected {3}. Please report this bug to Timwi.", _moduleId, clue.Type, clue.Values.Length, expectedNumValues);
+            Debug.LogFormat(@"[Puzzword #{0}] Clue {1} has {2} values instead of expected {3}. Please report this bug to Timwi.", _moduleId, clue.Type, clue.Values.Length, expectedNumValues);
     }
 
     void GeneratePuzzle(int seed)
@@ -531,7 +529,7 @@ public class ProperPasswordModule : MonoBehaviour
 
         if (solutionCount == 0) // No solution: pretty bad bug
         {
-            Debug.LogFormat(@"[Proper Password #{0}] Fatal error: no solution!", _moduleId);
+            Debug.LogFormat(@"[Puzzword #{0}] Fatal error: no solution!", _moduleId);
             Module.HandlePass();
             throw new InvalidOperationException();
         }

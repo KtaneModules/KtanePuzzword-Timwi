@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ProperPassword
+namespace Puzzword
 {
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
     sealed class LayoutAttribute : Attribute

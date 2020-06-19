@@ -1,4 +1,4 @@
-﻿namespace ProperPassword
+﻿namespace Puzzword
 {
     static class Data
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ProperPassword
+namespace Puzzword
 {
     static class Ut
     {

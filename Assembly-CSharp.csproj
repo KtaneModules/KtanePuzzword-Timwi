@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{DEC01EE5-C0C4-27A9-4D36-959C9E0DB04F}</ProjectGuid>
+    <ProjectGuid>{B776D3C8-5602-09FD-B3E5-D432CE0EA29C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -66,7 +66,6 @@
      <Compile Include="Assets\Scripts\Extensions.cs" />
      <Compile Include="Assets\Scripts\LayoutAttribute.cs" />
      <Compile Include="Assets\Scripts\LayoutType.cs" />
-     <Compile Include="Assets\Scripts\ProperPasswordModule.cs" />
      <Compile Include="Assets\Scripts\PuzzleSolver\BetweenConstraint.cs" />
      <Compile Include="Assets\Scripts\PuzzleSolver\Constraint.cs" />
      <Compile Include="Assets\Scripts\PuzzleSolver\HasSumConstraint.cs" />
@@ -83,6 +82,7 @@
      <Compile Include="Assets\Scripts\PuzzleSolver\RelativeToPositionConstraint.cs" />
      <Compile Include="Assets\Scripts\PuzzleSolver\ThreeCellLambdaConstraint.cs" />
      <Compile Include="Assets\Scripts\PuzzleSolver\TwoCellLambdaConstraint.cs" />
+     <Compile Include="Assets\Scripts\PuzzwordModule.cs" />
      <Compile Include="Assets\Scripts\ReduceRequiredSet.cs" />
      <Compile Include="Assets\Scripts\ScreenType.cs" />
      <Compile Include="Assets\Scripts\WideScreenPosition.cs" />
@@ -284,10 +284,10 @@
  <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
  </Reference>
  <Reference Include="KMFramework">
- <HintPath>D:/c/KTANE/ProperPassword/Assets/Plugins/Managed/KMFramework.dll</HintPath>
+ <HintPath>D:/c/KTANE/Puzzword/Assets/Plugins/Managed/KMFramework.dll</HintPath>
  </Reference>
  <Reference Include="Newtonsoft.Json">
- <HintPath>D:/c/KTANE/ProperPassword/Assets/Plugins/Managed/Newtonsoft.Json.dll</HintPath>
+ <HintPath>D:/c/KTANE/Puzzword/Assets/Plugins/Managed/Newtonsoft.Json.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Analytics">
  <HintPath>C:/Users/Timwi/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.analytics@2.0.13/UnityEngine.Analytics.dll</HintPath>
