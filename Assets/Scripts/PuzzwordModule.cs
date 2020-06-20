@@ -60,10 +60,10 @@ public class PuzzwordModule : MonoBehaviour
     {
         /* Full */ { LayoutType._1Constant, new[] { ClueType.NotPresent, ClueType.HasSum } },
         /* Room for 2 more */ { LayoutType._1Symbol_1Subsymbol, new[] { ClueType.Smallest, ClueType.NotSmallest, ClueType.Largest, ClueType.NotLargest, ClueType.Prime, ClueType.NotPrime, ClueType.Square, ClueType.NotSquare } },
-        /* Full */ { LayoutType._1Symbol_1Constant, new[] { ClueType.LessThanConstant, ClueType.GreaterThanConstant, ClueType.LeftOfPosition, ClueType.RightOfPosition, ClueType.Divisible, ClueType.NotDivisible } },
-        /* Full */ { LayoutType._2USymbols_1Constant, new[] { ClueType.Sum2, ClueType.Difference2, ClueType.Product2, ClueType.Between2, ClueType.Quotient2, ClueType.ModuloDiff2 } },
+        /* Full */ { LayoutType._1Symbol_1Constant, new[] { ClueType.GreaterThanConstant, ClueType.RightOfPosition, ClueType.LessThanConstant, ClueType.LeftOfPosition, ClueType.Divisible, ClueType.NotDivisible } },
+        /* Full */ { LayoutType._2USymbols_1Constant, new[] { ClueType.Sum2, ClueType.Difference2, ClueType.Product2,  ClueType.Quotient2, ClueType.Between2, ClueType.ModuloDiff2 } },
         /* Full */ { LayoutType._2OSymbols, new[] { ClueType.LessThan } },
-        /* Room for 1 more */ { LayoutType._2OSymbols_1Constant, new[] { ClueType.Modulo2, ClueType.ConcatenationDivisible, ClueType.ConcatenationNotDivisible } },
+        /* Room for 1 more */ { LayoutType._2OSymbols_1Constant, new[] { ClueType.ConcatenationDivisible, ClueType.Modulo2, ClueType.ConcatenationNotDivisible } },
         /* Full */ { LayoutType._2UConstants, new[] { ClueType.Between, ClueType.Outside, ClueType.HasXor, ClueType.HasXnor } },
         /* Full */ { LayoutType._2USymbols_1Symbol, new[] { ClueType.Sum3, ClueType.Product3 } },
         /* Room for 1 more */ { LayoutType._3OSymbols, new[] { ClueType.Modulo3 } }
