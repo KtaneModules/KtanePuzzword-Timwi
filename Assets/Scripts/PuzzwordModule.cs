@@ -195,6 +195,46 @@ public class PuzzwordModule : MonoBehaviour
     private IEnumerator waitForThread()
     {
         yield return new WaitUntil(() => _threadReady);
+        foreach (var c in _puzzle.OrderByDescending(p => p.GetScreenType()))
+        {
+            switch (c.Type)
+            {
+                case ClueType.Between: Debug.LogFormat("[Puzzword #{0}] Constraint: There is a value between {1} and {2} (exclusive).", _moduleId, c.Values[0], c.Values[1]); break;
+                case ClueType.Between2: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is between {2} and {3}.", _moduleId, c.Values[2], (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A')); break;
+                case ClueType.ConcatenationDivisible: Debug.LogFormat("[Puzzword #{0}] Constraint: The concatenation of {1}{2} is divisible by {3}.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), c.Values[2]); break;
+                case ClueType.ConcatenationNotDivisible: Debug.LogFormat("[Puzzword #{0}] Constraint: The concatenation of {1}{2} is not divisible by {3}.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), c.Values[2]); break;
+                case ClueType.Difference2: Debug.LogFormat("[Puzzword #{0}] Constraint: The absolute difference of {1} and {2} is {3}.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), c.Values[2]); break;
+                case ClueType.Divisible: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is divisible by {2}.", _moduleId, (char) (c.Values[0] + 'A'), c.Values[1]); break;
+                case ClueType.GreaterThanConstant: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is greater than {2}.", _moduleId, (char) (c.Values[0] + 'A'), c.Values[1]); break;
+                case ClueType.HasSum: Debug.LogFormat("[Puzzword #{0}] Constraint: There are two values that add up to {1}.", _moduleId, c.Values[0]); break;
+                case ClueType.HasXnor: Debug.LogFormat("[Puzzword #{0}] Constraint: There is a {1} and a {2}, or neither.", _moduleId, c.Values[0], c.Values[1]); break;
+                case ClueType.HasXor: Debug.LogFormat("[Puzzword #{0}] Constraint: There is a {1} or a {2}, but not both.", _moduleId, c.Values[0], c.Values[1]); break;
+                case ClueType.Largest: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} has the largest value.", _moduleId, (char) (c.Values[0] + 'A')); break;
+                case ClueType.LeftOfPosition: Debug.LogFormat("[Puzzword #{0}] Constraint: There is a {1} further left than {2}.", _moduleId, c.Values[1], (char) (c.Values[0] + 'A')); break;
+                case ClueType.LessThan: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is less than {2}.", _moduleId, (char) (c.Values[1] + 'A'), (char) (c.Values[0] + 'A')); break;
+                case ClueType.LessThanConstant: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is less than {2}.", _moduleId, (char) (c.Values[0] + 'A'), c.Values[1]); break;
+                case ClueType.Modulo2: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} modulo {2} = {3}.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), c.Values[2]); break;
+                case ClueType.Modulo3: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} modulo {2} = {3}", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), (char) (c.Values[2] + 'A')); break;
+                case ClueType.ModuloDiff2: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is a multiple of {2} away from {3}.", _moduleId, (char) (c.Values[0] + 'A'), c.Values[2], (char) (c.Values[1] + 'A')); break;
+                case ClueType.NotDivisible: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is not divisible by {2}.", _moduleId, (char) (c.Values[0] + 'A'), c.Values[1]); break;
+                case ClueType.NotLargest: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} does not have the largest value.", _moduleId, (char) (c.Values[0] + 'A')); break;
+                case ClueType.NotPresent: Debug.LogFormat("[Puzzword #{0}] Constraint: There is no {1}.", _moduleId, c.Values[0]); break;
+                case ClueType.NotPrime: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is not a prime number.", _moduleId, (char) (c.Values[0] + 'A')); break;
+                case ClueType.NotSmallest: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} does not have the smallest value.", _moduleId, (char) (c.Values[0] + 'A')); break;
+                case ClueType.NotSquare: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is not a square number.", _moduleId, (char) (c.Values[0] + 'A')); break;
+                case ClueType.Outside: Debug.LogFormat("[Puzzword #{0}] Constraint: There is a value outside of {1} to {2} (exclusive).", _moduleId, c.Values[0], c.Values[1]); break;
+                case ClueType.Prime: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is a prime number.", _moduleId, (char) (c.Values[0] + 'A')); break;
+                case ClueType.Product2: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} × {2} = {3}.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), c.Values[2]); break;
+                case ClueType.Product3: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} × {2} = {3}.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), (char) (c.Values[2] + 'A')); break;
+                case ClueType.Quotient2: Debug.LogFormat("[Puzzword #{0}] Constraint: Of {1} and {2}, one is {3} times the other.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), c.Values[2]); break;
+                case ClueType.RightOfPosition: Debug.LogFormat("[Puzzword #{0}] Constraint: There is a {1} further right than {2}.", _moduleId, c.Values[1], (char) (c.Values[0] + 'A')); break;
+                case ClueType.Smallest: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} has the smallest value.", _moduleId, (char) (c.Values[0] + 'A')); break;
+                case ClueType.Square: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is a square number.", _moduleId, (char) (c.Values[0] + 'A')); break;
+                case ClueType.Sum2: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} + {2} = {3}.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), c.Values[2]); break;
+                case ClueType.Sum3: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} + {2} = {3}.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), (char) (c.Values[2] + 'A')); break;
+                default: throw new InvalidOperationException(@"What is a " + c.Type);
+            }
+        }
         Debug.LogFormat(@"[Puzzword #{0}] Solution: {1}", _moduleId, _solution);
         setPage(0);
     }
