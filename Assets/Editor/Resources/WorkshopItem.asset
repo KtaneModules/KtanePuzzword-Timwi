@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Name: WorkshopItem
   m_EditorClassIdentifier: 
   WorkshopPublishedFileID: 2131267712
-  Title: Proper Password
+  Title: Puzzword
   Tags:
   - Regular Module
