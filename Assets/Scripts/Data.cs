@@ -2840,7 +2840,6 @@
             "ORDEAL",
             "ORDERS",
             "ORGANS",
-            "ORGASM",
             "ORIENT",
             "ORIGIN",
             "ORKNEY",
