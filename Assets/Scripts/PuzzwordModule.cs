@@ -592,4 +592,47 @@ public class PuzzwordModule : MonoBehaviour
     {
         return new Puzzle(_numLetters, _min, _max, constraints.Select(c => c.Constraint)).Solve().Take(2).Count();
     }
+
+#pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"!{0} submit puzzle [submit the answer PUZZLE] | !{0} toggle [switch to the other screen, if any]";
+#pragma warning restore 414
+
+    public IEnumerator ProcessTwitchCommand(string command)
+    {
+        if (Regex.IsMatch(command, @"^\s*(toggle|sw|switch|screen|page|flip|right|left|next|prev|previous)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            yield return new List<KMSelectable> { NextButton };
+            yield break;
+        }
+
+        var m = Regex.Match(command, @"^\s*(?:submit|enter|input|go)\s+([a-z]{6})\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        if (!m.Success)
+            yield break;
+        yield return "solve";
+        yield return "strike";
+        yield return TpButtonsForWord(m.Groups[1].Value.ToUpperInvariant());
+    }
+
+    public IEnumerator TwitchHandleForcedSolve()
+    {
+        foreach (var btn in TpButtonsForWord(_solution))
+        {
+            btn.OnInteract();
+            yield return new WaitForSeconds(.1f);
+        }
+    }
+
+    private List<KMSelectable> TpButtonsForWord(string word)
+    {
+        var btns = new List<KMSelectable> { NextButton };
+        var infs = Enumerable.Range(0, 6).Select(i => new { Char = word[i], Index = i }).OrderBy(inf => inf.Char).ToArray();
+        var last = 'A';
+        for (var i = 0; i < infs.Length; i++)
+        {
+            btns.AddRange(Enumerable.Repeat(InputButtons[infs[i].Index], infs[i].Char - last + 1));
+            last = infs[i].Char;
+        }
+
+        return btns;
+    }
 }

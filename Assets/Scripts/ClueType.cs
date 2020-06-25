@@ -3,78 +3,78 @@
     enum ClueType
     {
         [Layout(LayoutType._1Constant)]
-        NotPresent,     // $"There is no {v}."
+        NotPresent,
         [Layout(LayoutType._1Constant)]
-        HasSum,     // $"There are two values that add up to {solution[i] + solution[j]}."
+        HasSum,
 
         [Layout(LayoutType._1Symbol_1Subsymbol)]
-        Smallest,       // $"{(char) (i + 'A')} has the smallest value."
+        Smallest,
         [Layout(LayoutType._1Symbol_1Subsymbol)]
-        Largest,        // $"{(char) (i + 'A')} has the largest value."
+        Largest,
         [Layout(LayoutType._1Symbol_1Subsymbol)]
-        NotSmallest,    // $"{(char) (i + 'A')} does not have the smallest value."
+        NotSmallest,
         [Layout(LayoutType._1Symbol_1Subsymbol)]
-        NotLargest,     // $"{(char) (i + 'A')} does not have the largest value."
+        NotLargest,
         [Layout(LayoutType._1Symbol_1Subsymbol)]
-        Prime,          // $"{(char) (i + 'A')} is a prime number."
+        Prime,
         [Layout(LayoutType._1Symbol_1Subsymbol)]
-        NotPrime,       // $"{(char) (i + 'A')} is not a prime number."
+        NotPrime,
         [Layout(LayoutType._1Symbol_1Subsymbol)]
-        Square,         // $"{(char) (i + 'A')} is a square number."
+        Square,
         [Layout(LayoutType._1Symbol_1Subsymbol)]
-        NotSquare,      // $"{(char) (i + 'A')} is not a square number."
+        NotSquare,
 
         [Layout(LayoutType._1Symbol_1Constant)]
-        LessThanConstant,        // $"{(char) (i + 'A')} is less than {v}."
+        LessThanConstant,
         [Layout(LayoutType._1Symbol_1Constant)]
-        GreaterThanConstant,        // $"{(char) (i + 'A')} is greater than {v}."
+        GreaterThanConstant,
         [Layout(LayoutType._1Symbol_1Constant)]
-        LeftOfPosition,     // $"There is a {solution[i]} further left than {(char) (j + 'A')}."
+        LeftOfPosition,
         [Layout(LayoutType._1Symbol_1Constant)]
-        RightOfPosition,    // $"There is a {solution[i]} further right than {(char) (j + 'A')}."
+        RightOfPosition,
         [Layout(LayoutType._1Symbol_1Constant)]
-        Divisible,          // $"{(char) (i + 'A')} is divisible by {m}."
+        Divisible,
         [Layout(LayoutType._1Symbol_1Constant)]
-        NotDivisible,   // $"{(char) (i + 'A')} is not divisible by {m}."
+        NotDivisible,
 
         [Layout(LayoutType._2USymbols_1Constant)]
-        Difference2,    // $"The absolute difference of {(char) (i + 'A')} and {(char) (j + 'A')} is {Math.Abs(solution[i] - solution[j])}."
+        Difference2,
         [Layout(LayoutType._2USymbols_1Constant)]
-        Quotient2,  // $"Of {(char) (i + 'A')} and {(char) (j + 'A')}, one is {solution[i] / solution[j]} times the other."
+        Quotient2,
         [Layout(LayoutType._2USymbols_1Constant)]
-        ModuloDiff2,    // $"{(char) (i + 'A')} is a multiple of {m} away from {(char) (j + 'A')}."
+        ModuloDiff2,
         [Layout(LayoutType._2USymbols_1Constant)]
-        Sum2,    // $"The sum of {(char) (i + 'A')} and {(char) (j + 'A')} is {solution[i] + solution[j]}."
+        Sum2,
         [Layout(LayoutType._2USymbols_1Constant)]
-        Product2,    // $"The product of {(char) (i + 'A')} and {(char) (j + 'A')} is {solution[i] * solution[j]}."
+        Product2,
         [Layout(LayoutType._2USymbols_1Constant)]
-        Between2,     // $"{k} is between {(char) (i + 'A')} and {(char) (j + 'A')}."
+        Between2,
 
         [Layout(LayoutType._2OSymbols)]
-        LessThan,    // $"{(char) (i + 'A')} is less than {(char) (j + 'A')}."
+        LessThan,
 
         [Layout(LayoutType._2OSymbols_1Constant)]
-        Modulo2,    // $"{(char) (i + 'A')} modulo {(char) (j + 'A')} is {solution[i] % solution[j]}."
+        Modulo2,
         [Layout(LayoutType._2OSymbols_1Constant)]
-        ConcatenationDivisible,      // $"The concatenation of {(char) (i + 'A')}{(char) (j + 'A')} is divisible by {m}."
+        ConcatenationDivisible,
         [Layout(LayoutType._2OSymbols_1Constant)]
-        ConcatenationNotDivisible,   // $"The concatenation of {(char) (i + 'A')}{(char) (j + 'A')} is not divisible by {m}."
+        ConcatenationNotDivisible,
 
         [Layout(LayoutType._2UConstants)]
-        Between,        // $"There is a value between {low} and {high}."
+        Between,
         [Layout(LayoutType._2UConstants)]
-        Outside,            // $"There is a value outside of {low} to {high}."
+        Outside,
         [Layout(LayoutType._2UConstants)]
-        HasXor,         // $"There is a {v1} or a {v2}, but not both."
+        HasXor,
         [Layout(LayoutType._2UConstants)]
-        HasXnor,        // $"There is a {v1} and a {v2}, or neither."
+        HasXnor,
 
-        // Wide screen
+
         [Layout(LayoutType._2USymbols_1Symbol)]
-        Sum3,        // $"{(char) (i + 'A')} + {(char) (j + 'A')} = {(char) (k + 'A')}"
+        Sum3,
         [Layout(LayoutType._2USymbols_1Symbol)]
-        Product3,        // $"{(char) (i + 'A')} × {(char) (j + 'A')} = {(char) (k + 'A')}"
+        Product3,
         [Layout(LayoutType._3OSymbols)]
-        Modulo3,        // $"{(char) (i + 'A')} modulo {(char) (j + 'A')} = {(char) (k + 'A')}"
+        Modulo3,
     }
 }
