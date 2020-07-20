@@ -275,7 +275,7 @@ public class PuzzwordModule : MonoBehaviour
             if (screen > 0 && 6 * _curPage + screen - 1 >= smallScreenClues.Count)
                 continue;
             var clue = screen == 0 ? wideScreenClues[_curPage] : smallScreenClues[6 * _curPage + screen - 1];
-            //Debug.LogFormat("<Puzzword #{0}> Screen {1}: {2} ({3})", _moduleId, screen, clue.Type, clue.Values.Join(", "));
+            //Debug.LogFormat("<Puzzword #{0}> Screen {1}: {2} ({3}), {4}", _moduleId, screen, clue.Type, clue.Values.Join(", "), clue.GetLayoutType());
             var layout = Array.IndexOf(_layouts[clue.GetLayoutType()], clue.Type);
             switch (clue.Type.GetLayoutType())
             {
@@ -364,7 +364,7 @@ public class PuzzwordModule : MonoBehaviour
                 display == ConstantDisplay.InsideHoriz || display == ConstantDisplay.InsideVert ? 0 : 2.9f,
                 0));
 
-        var base4 = "";
+        var base4 = cnst == 0 ? "0" : "";
         while (cnst > 0)
         {
             base4 = (cnst % 4) + base4;
