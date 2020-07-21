@@ -11,10 +11,12 @@
         _1Symbol_1Subsymbol,
         [LayoutType(6)] // above, below, left, right, inside horiz, inside vert
         _1Symbol_1Constant,
-        [LayoutType(1)] // small symbol inside large
-        _2OSymbols,
+        [LayoutType(1)] // symbols superimposed
+        _2USymbols,
         [LayoutType(6)] // symbols superimposed, constant above/below/left/right/inside horiz/vert
         _2USymbols_1Constant,
+        [LayoutType(1)] // small symbol inside large
+        _2OSymbols,
         [LayoutType(4)] // small symbol inside large, constant above/below/left/right
         _2OSymbols_1Constant,
 

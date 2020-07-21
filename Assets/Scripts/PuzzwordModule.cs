@@ -62,12 +62,13 @@ public class PuzzwordModule : MonoBehaviour
         /* Full */ { LayoutType._1Constant, new[] { ClueType.NotPresent, ClueType.HasSum } },
         /* Room for 2 more */ { LayoutType._1Symbol_1Subsymbol, new[] { ClueType.Smallest, ClueType.NotSmallest, ClueType.Largest, ClueType.NotLargest, ClueType.Prime, ClueType.NotPrime, ClueType.Square, ClueType.NotSquare } },
         /* Full */ { LayoutType._1Symbol_1Constant, new[] { ClueType.GreaterThanConstant, ClueType.RightOfPosition, ClueType.LessThanConstant, ClueType.LeftOfPosition, ClueType.Divisible, ClueType.NotDivisible } },
+        /* Full */ { LayoutType._2USymbols, new[] { ClueType.Different } },
         /* Full */ { LayoutType._2USymbols_1Constant, new[] { ClueType.Sum2, ClueType.Difference2, ClueType.Product2,  ClueType.Quotient2, ClueType.Between2, ClueType.ModuloDiff2 } },
         /* Full */ { LayoutType._2OSymbols, new[] { ClueType.LessThan } },
-        /* Room for 1 more */ { LayoutType._2OSymbols_1Constant, new[] { ClueType.ConcatenationDivisible, ClueType.Modulo2, ClueType.ConcatenationNotDivisible } },
+        /* Full */ { LayoutType._2OSymbols_1Constant, new[] { ClueType.ConcatenationDivisible, ClueType.Modulo2, ClueType.ConcatenationNotDivisible, ClueType.Modulo2Not } },
         /* Full */ { LayoutType._2UConstants, new[] { ClueType.Between, ClueType.Outside, ClueType.HasXor, ClueType.HasXnor } },
         /* Full */ { LayoutType._2USymbols_1Symbol, new[] { ClueType.Sum3, ClueType.Product3 } },
-        /* Room for 1 more */ { LayoutType._3OSymbols, new[] { ClueType.Modulo3 } }
+        /* Full */ { LayoutType._3OSymbols, new[] { ClueType.Modulo3, ClueType.ConcatenationDivisible3 } }
     };
 
     static T[] newArray<T>(params T[] array) { return array; }
@@ -94,7 +95,42 @@ public class PuzzwordModule : MonoBehaviour
         Debug.LogFormat(@"<Puzzword #{0}> Puzzle seed: {1}", _moduleId, seed);
         new Thread(() => GeneratePuzzle(seed)).Start();
         StartCoroutine(waitForThread());
+
+        //StartCoroutine(waitForStatistics());
     }
+
+    //private int _statisticsThreadReady = 1;
+    //private readonly Dictionary<ClueType, int> _statistics = new Dictionary<ClueType, int>();
+    //private IEnumerator waitForStatistics()
+    //{
+    //    for (var i = 0; i < Environment.ProcessorCount; i++)
+    //    {
+    //        var seed = Rnd.Range(0, int.MaxValue);
+    //        new Thread(() => GatherStatistics(seed)).Start();
+    //    }
+    //    yield return new WaitForSeconds(1f);
+    //    _statisticsThreadReady--;
+    //    yield return new WaitUntil(() => _statisticsThreadReady == 0);
+    //    File.WriteAllText(@"D:\temp\temp.txt", _statistics.OrderByDescending(p => p.Value).Select(p => string.Format("{0,25} {1} = {2,4} {3}", p.Key, _privilegedGroups.Contains(p.Key) ? "!" : " ", p.Value, new string('█', p.Value))).Join("\n"));
+    //    Debug.Log("Statistics ready");
+    //}
+
+    //private void GatherStatistics(int seed)
+    //{
+    //    _statisticsThreadReady++;
+    //    string solutionWord;
+    //    for (var iter = 0; iter < 25; iter++)
+    //    {
+    //        var clues = GeneratePuzzle(seed + iter, out solutionWord);
+    //        lock (_statistics)
+    //        {
+    //            int value;
+    //            for (var clueIx = 0; clueIx < clues.Length; clueIx++)
+    //                _statistics[clues[clueIx].Type] = _statistics.TryGetValue(clues[clueIx].Type, out value) ? value + 1 : 1;
+    //        }
+    //    }
+    //    _statisticsThreadReady--;
+    //}
 
     private KMSelectable.OnInteractHandler InputButtonPress(int i)
     {
@@ -197,45 +233,7 @@ public class PuzzwordModule : MonoBehaviour
     {
         yield return new WaitUntil(() => _threadReady);
         foreach (var c in _puzzle.OrderByDescending(p => p.GetScreenType()))
-        {
-            switch (c.Type)
-            {
-                case ClueType.Between: Debug.LogFormat("[Puzzword #{0}] Constraint: There is a value between {1} and {2} (exclusive).", _moduleId, c.Values[0], c.Values[1]); break;
-                case ClueType.Between2: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is between {2} and {3}.", _moduleId, c.Values[2], (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A')); break;
-                case ClueType.ConcatenationDivisible: Debug.LogFormat("[Puzzword #{0}] Constraint: The concatenation of {1}{2} is divisible by {3}.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), c.Values[2]); break;
-                case ClueType.ConcatenationNotDivisible: Debug.LogFormat("[Puzzword #{0}] Constraint: The concatenation of {1}{2} is not divisible by {3}.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), c.Values[2]); break;
-                case ClueType.Difference2: Debug.LogFormat("[Puzzword #{0}] Constraint: The absolute difference of {1} and {2} is {3}.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), c.Values[2]); break;
-                case ClueType.Divisible: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is divisible by {2}.", _moduleId, (char) (c.Values[0] + 'A'), c.Values[1]); break;
-                case ClueType.GreaterThanConstant: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is greater than {2}.", _moduleId, (char) (c.Values[0] + 'A'), c.Values[1]); break;
-                case ClueType.HasSum: Debug.LogFormat("[Puzzword #{0}] Constraint: There are two values that add up to {1}.", _moduleId, c.Values[0]); break;
-                case ClueType.HasXnor: Debug.LogFormat("[Puzzword #{0}] Constraint: There is a {1} and a {2}, or neither.", _moduleId, c.Values[0], c.Values[1]); break;
-                case ClueType.HasXor: Debug.LogFormat("[Puzzword #{0}] Constraint: There is a {1} or a {2}, but not both.", _moduleId, c.Values[0], c.Values[1]); break;
-                case ClueType.Largest: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} has the largest value.", _moduleId, (char) (c.Values[0] + 'A')); break;
-                case ClueType.LeftOfPosition: Debug.LogFormat("[Puzzword #{0}] Constraint: There is a {1} further left than {2}.", _moduleId, c.Values[1], (char) (c.Values[0] + 'A')); break;
-                case ClueType.LessThan: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is less than {2}.", _moduleId, (char) (c.Values[1] + 'A'), (char) (c.Values[0] + 'A')); break;
-                case ClueType.LessThanConstant: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is less than {2}.", _moduleId, (char) (c.Values[0] + 'A'), c.Values[1]); break;
-                case ClueType.Modulo2: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} modulo {2} = {3}.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), c.Values[2]); break;
-                case ClueType.Modulo3: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} modulo {2} = {3}", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), (char) (c.Values[2] + 'A')); break;
-                case ClueType.ModuloDiff2: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is a multiple of {2} away from {3}.", _moduleId, (char) (c.Values[0] + 'A'), c.Values[2], (char) (c.Values[1] + 'A')); break;
-                case ClueType.NotDivisible: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is not divisible by {2}.", _moduleId, (char) (c.Values[0] + 'A'), c.Values[1]); break;
-                case ClueType.NotLargest: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} does not have the largest value.", _moduleId, (char) (c.Values[0] + 'A')); break;
-                case ClueType.NotPresent: Debug.LogFormat("[Puzzword #{0}] Constraint: There is no {1}.", _moduleId, c.Values[0]); break;
-                case ClueType.NotPrime: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is not a prime number.", _moduleId, (char) (c.Values[0] + 'A')); break;
-                case ClueType.NotSmallest: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} does not have the smallest value.", _moduleId, (char) (c.Values[0] + 'A')); break;
-                case ClueType.NotSquare: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is not a square number.", _moduleId, (char) (c.Values[0] + 'A')); break;
-                case ClueType.Outside: Debug.LogFormat("[Puzzword #{0}] Constraint: There is a value outside of {1} to {2} (exclusive).", _moduleId, c.Values[0], c.Values[1]); break;
-                case ClueType.Prime: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is a prime number.", _moduleId, (char) (c.Values[0] + 'A')); break;
-                case ClueType.Product2: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} × {2} = {3}.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), c.Values[2]); break;
-                case ClueType.Product3: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} × {2} = {3}.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), (char) (c.Values[2] + 'A')); break;
-                case ClueType.Quotient2: Debug.LogFormat("[Puzzword #{0}] Constraint: Of {1} and {2}, one is {3} times the other.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), c.Values[2]); break;
-                case ClueType.RightOfPosition: Debug.LogFormat("[Puzzword #{0}] Constraint: There is a {1} further right than {2}.", _moduleId, c.Values[1], (char) (c.Values[0] + 'A')); break;
-                case ClueType.Smallest: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} has the smallest value.", _moduleId, (char) (c.Values[0] + 'A')); break;
-                case ClueType.Square: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} is a square number.", _moduleId, (char) (c.Values[0] + 'A')); break;
-                case ClueType.Sum2: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} + {2} = {3}.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), c.Values[2]); break;
-                case ClueType.Sum3: Debug.LogFormat("[Puzzword #{0}] Constraint: {1} + {2} = {3}.", _moduleId, (char) (c.Values[0] + 'A'), (char) (c.Values[1] + 'A'), (char) (c.Values[2] + 'A')); break;
-                default: throw new InvalidOperationException(@"What is a " + c.Type);
-            }
-        }
+            Debug.LogFormat("[Puzzword #{0}] Constraint: {1}", _moduleId, c);
         Debug.LogFormat(@"[Puzzword #{0}] Solution: {1}", _moduleId, _solution);
         setPage(0);
     }
@@ -275,24 +273,9 @@ public class PuzzwordModule : MonoBehaviour
             if (screen > 0 && 6 * _curPage + screen - 1 >= smallScreenClues.Count)
                 continue;
             var clue = screen == 0 ? wideScreenClues[_curPage] : smallScreenClues[6 * _curPage + screen - 1];
-            //Debug.LogFormat("<Puzzword #{0}> Screen {1}: {2} ({3}), {4}", _moduleId, screen, clue.Type, clue.Values.Join(", "), clue.GetLayoutType());
             var layout = Array.IndexOf(_layouts[clue.GetLayoutType()], clue.Type);
             switch (clue.Type.GetLayoutType())
             {
-                // Wide screen
-                case LayoutType._2USymbols_1Symbol:
-                    assertValues(clue, 3);
-                    showSymbolWide(screen, clue.Values[0], layout == 0 ? WideScreenPosition.Left : WideScreenPosition.Right);
-                    showSymbolWide(screen, clue.Values[1], layout == 0 ? WideScreenPosition.Left : WideScreenPosition.Right);
-                    showSymbolWide(screen, clue.Values[2], layout == 0 ? WideScreenPosition.Right : WideScreenPosition.Left);
-                    break;
-                case LayoutType._3OSymbols:
-                    assertValues(clue, 3);
-                    showSymbolWide(screen, clue.Values[0], layout == 0 ? WideScreenPosition.Left : WideScreenPosition.Right);
-                    showSymbolWide(screen, clue.Values[1], layout == 0 ? WideScreenPosition.Left : WideScreenPosition.Right, small: true);
-                    showSymbolWide(screen, clue.Values[2], layout == 0 ? WideScreenPosition.Right : WideScreenPosition.Left);
-                    break;
-
                 // Narrow screen
                 case LayoutType._1Constant:
                     assertValues(clue, 1);
@@ -313,10 +296,10 @@ public class PuzzwordModule : MonoBehaviour
                     showSymbol(screen, clue.Values[0]);
                     showConstant(screen, clue.Values[1], new[] { ConstantDisplay.Above, ConstantDisplay.Right, ConstantDisplay.Below, ConstantDisplay.Left, ConstantDisplay.InsideHoriz, ConstantDisplay.InsideVert }[layout]);
                     break;
-                case LayoutType._2OSymbols:
+                case LayoutType._2USymbols:
                     assertValues(clue, 2);
                     showSymbol(screen, clue.Values[0]);
-                    showSymbol(screen, clue.Values[1], small: true);
+                    showSymbol(screen, clue.Values[1]);
                     break;
                 case LayoutType._2USymbols_1Constant:
                     assertValues(clue, 3);
@@ -324,11 +307,30 @@ public class PuzzwordModule : MonoBehaviour
                     showSymbol(screen, clue.Values[1]);
                     showConstant(screen, clue.Values[2], new[] { ConstantDisplay.Above, ConstantDisplay.Right, ConstantDisplay.Below, ConstantDisplay.Left, ConstantDisplay.InsideHoriz, ConstantDisplay.InsideVert }[layout]);
                     break;
+                case LayoutType._2OSymbols:
+                    assertValues(clue, 2);
+                    showSymbol(screen, clue.Values[0]);
+                    showSymbol(screen, clue.Values[1], small: true);
+                    break;
                 case LayoutType._2OSymbols_1Constant:
                     assertValues(clue, 3);
                     showSymbol(screen, clue.Values[0]);
                     showSymbol(screen, clue.Values[1], small: true);
                     showConstant(screen, clue.Values[2], new[] { ConstantDisplay.Above, ConstantDisplay.Right, ConstantDisplay.Below, ConstantDisplay.Left }[layout]);
+                    break;
+
+                // Wide screen
+                case LayoutType._2USymbols_1Symbol:
+                    assertValues(clue, 3);
+                    showSymbolWide(screen, clue.Values[0], layout == 0 ? WideScreenPosition.Left : WideScreenPosition.Right);
+                    showSymbolWide(screen, clue.Values[1], layout == 0 ? WideScreenPosition.Left : WideScreenPosition.Right);
+                    showSymbolWide(screen, clue.Values[2], layout == 0 ? WideScreenPosition.Right : WideScreenPosition.Left);
+                    break;
+                case LayoutType._3OSymbols:
+                    assertValues(clue, 3);
+                    showSymbolWide(screen, clue.Values[0], layout == 0 ? WideScreenPosition.Left : WideScreenPosition.Right);
+                    showSymbolWide(screen, clue.Values[1], layout == 0 ? WideScreenPosition.Left : WideScreenPosition.Right, small: true);
+                    showSymbolWide(screen, clue.Values[2], layout == 0 ? WideScreenPosition.Right : WideScreenPosition.Left);
                     break;
             }
         }
@@ -413,16 +415,22 @@ public class PuzzwordModule : MonoBehaviour
 
     void GeneratePuzzle(int seed)
     {
+        _puzzle = GeneratePuzzle(seed, out _solution);
+        _threadReady = true;
+    }
+
+    private static readonly ClueType[] _privilegedGroups = newArray(
+        ClueType.Between, ClueType.Outside, ClueType.NotDivisible, ClueType.LessThanConstant, ClueType.GreaterThanConstant,
+        ClueType.NotPresent, ClueType.NotLargest, ClueType.NotPrime, ClueType.NotSmallest, ClueType.NotSquare,
+        ClueType.ConcatenationNotDivisible, ClueType.LessThan, ClueType.Prime, ClueType.Modulo2Not, ClueType.Different);
+
+    private Clue[] GeneratePuzzle(int seed, out string solutionWord)
+    {
         var words = Data.AllWords;
         var rnd = new System.Random(seed);
 
-        var privilegedGroups = newArray(
-            ClueType.Between, ClueType.Outside, ClueType.NotDivisible, ClueType.LessThanConstant, ClueType.GreaterThanConstant,
-            ClueType.NotPresent, ClueType.NotLargest, ClueType.NotPrime, ClueType.NotSmallest, ClueType.NotSquare,
-            ClueType.ConcatenationNotDivisible, ClueType.LessThan, ClueType.Prime);
-
         var startTime = DateTime.UtcNow;
-        var solutionWord = words[rnd.Next(0, words.Length)];
+        solutionWord = words[rnd.Next(0, words.Length)];
         var solution = solutionWord.Select(ch => ch - 'A' + 1).ToArray();
         var n = solution.Length;
         var numAttempts = 0;
@@ -449,6 +457,9 @@ public class PuzzwordModule : MonoBehaviour
                 for (var value = Math.Min(solution[i], solution[j]) + 1; value < Math.Max(solution[i], solution[j]); value++)
                     allConstraints.Add(Clue.Between2(i, j, value));
                 allConstraints.Add(Clue.HasSum(solution[i] + solution[j]));
+
+                if (solution[i] != solution[j])
+                    allConstraints.Add(Clue.Different(i, j));
             }
 
         // Relations between two numbers (asymmetric)
@@ -463,7 +474,8 @@ public class PuzzwordModule : MonoBehaviour
                     foreach (var m in concatenationModulos)   // beware lambdas
                         allConstraints.Add(concat % m == 0 ? Clue.ConcatenationDivisible(i, j, m) : Clue.ConcatenationNotDivisible(i, j, m));
                     if (solution[j] != 0)
-                        allConstraints.Add(Clue.Modulo2(i, j, solution[i] % solution[j]));
+                        for (var m = 0; m <= 26; m++)
+                            allConstraints.Add(solution[i] % solution[j] == m ? Clue.Modulo2(i, j, m) : Clue.Modulo2Not(i, j, m));
                 }
 
         // Relations between three numbers
@@ -479,6 +491,8 @@ public class PuzzwordModule : MonoBehaviour
                                 allConstraints.Add(Clue.Product3(i, j, k));
                             if (solution[j] != 0 && solution[i] % solution[j] == solution[k])
                                 allConstraints.Add(Clue.Modulo3(i, j, k));
+                            if (solution[k] != 0 && int.Parse(solution[i].ToString() + solution[j].ToString()) % solution[k] == 0)
+                                allConstraints.Add(Clue.ConcatenationDivisible3(i, j, k));
                         }
 
         var minVal = solution.Min();
@@ -547,7 +561,7 @@ public class PuzzwordModule : MonoBehaviour
             constraints.Add(gr[ix]);
             gr.RemoveAt(ix);
         }
-        var constraintDic = constraintGroups.Where(gr => gr.Count > 0 && privilegedGroups.Contains(gr[0].Type)).ToDictionary(gr => gr[0].Type);
+        var constraintDic = constraintGroups.Where(gr => gr.Count > 0 && _privilegedGroups.Contains(gr[0].Type)).ToDictionary(gr => gr[0].Type);
 
         // Add more constraints if this is not unique
         var addedCount = 0;
@@ -577,16 +591,10 @@ public class PuzzwordModule : MonoBehaviour
         }
 
         // Reduce the set of constraints again
-        var req = Ut.ReduceRequiredSet(
-             constraints.Shuffle(rnd),
-             set => judgeConstraints(set.SetToTest) < 2).ToArray();
-
+        var req = Ut.ReduceRequiredSet(constraints.Shuffle(rnd), set => judgeConstraints(set.SetToTest) < 2).ToArray();
         if (req.Count(c => c.GetScreenType() == ScreenType.Wide) > 2 || req.Count(c => c.GetScreenType() == ScreenType.Narrow) > 12)
             goto tryAgain;
-
-        _puzzle = req;
-        _solution = solutionWord;
-        _threadReady = true;
+        return req;
     }
 
     private int judgeConstraints(IEnumerable<Clue> constraints)

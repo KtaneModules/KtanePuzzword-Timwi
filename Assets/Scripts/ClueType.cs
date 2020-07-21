@@ -37,6 +37,9 @@
         [Layout(LayoutType._1Symbol_1Constant)]
         NotDivisible,
 
+        [Layout(LayoutType._2USymbols)]
+        Different,
+
         [Layout(LayoutType._2USymbols_1Constant)]
         Difference2,
         [Layout(LayoutType._2USymbols_1Constant)]
@@ -54,11 +57,13 @@
         LessThan,
 
         [Layout(LayoutType._2OSymbols_1Constant)]
-        Modulo2,
-        [Layout(LayoutType._2OSymbols_1Constant)]
         ConcatenationDivisible,
         [Layout(LayoutType._2OSymbols_1Constant)]
+        Modulo2,
+        [Layout(LayoutType._2OSymbols_1Constant)]
         ConcatenationNotDivisible,
+        [Layout(LayoutType._2OSymbols_1Constant)]
+        Modulo2Not,
 
         [Layout(LayoutType._2UConstants)]
         Between,
@@ -69,12 +74,14 @@
         [Layout(LayoutType._2UConstants)]
         HasXnor,
 
-
+        // Wide screen
         [Layout(LayoutType._2USymbols_1Symbol)]
         Sum3,
         [Layout(LayoutType._2USymbols_1Symbol)]
         Product3,
         [Layout(LayoutType._3OSymbols)]
         Modulo3,
+        [Layout(LayoutType._3OSymbols)]
+        ConcatenationDivisible3
     }
 }
