@@ -56,6 +56,7 @@ public class PuzzwordModule : MonoBehaviour
     private Coroutine _delayedReset;
     private readonly char?[] _curSubmission = new char?[6];
     private char _lastLetter = 'A';
+    private static float _lastActivationTime = 0;
 
     private static readonly Dictionary<LayoutType, ClueType[]> _layouts = new Dictionary<LayoutType, ClueType[]>
     {
@@ -235,6 +236,11 @@ public class PuzzwordModule : MonoBehaviour
         foreach (var c in _puzzle.OrderByDescending(p => p.GetScreenType()))
             Debug.LogFormat("[Puzzword #{0}] Constraint: {1}", _moduleId, c);
         Debug.LogFormat(@"[Puzzword #{0}] Solution: {1}", _moduleId, _solution);
+
+        while (Time.time - _lastActivationTime < .1f)
+            yield return new WaitForSeconds(.25f);
+        _lastActivationTime = Time.time;
+
         setPage(0);
     }
 
