@@ -3269,8 +3269,6 @@
             "RANKLE",
             "RANSOM",
             "RAPIER",
-            "RAPING",
-            "RAPIST",
             "RAPPEL",
             "RAPPER",
             "RAPTOR",
