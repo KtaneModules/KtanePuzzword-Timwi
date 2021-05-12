@@ -635,7 +635,8 @@ public class PuzzwordModule : MonoBehaviour
             btn.OnInteract();
             yield return new WaitForSeconds(.1f);
         }
-        while (!_isSolved) yield return true;
+        while (!_isSolved)
+            yield return true;
     }
 
     private List<KMSelectable> TpButtonsForWord(string word)
