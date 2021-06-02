@@ -94,44 +94,8 @@ public class PuzzwordModule : MonoBehaviour
         WaitMessage.gameObject.SetActive(true);
         var seed = Rnd.Range(0, int.MaxValue);
         Debug.LogFormat(@"<Puzzword #{0}> Puzzle seed: {1}", _moduleId, seed);
-        new Thread(() => GeneratePuzzle(seed)).Start();
-        StartCoroutine(waitForThread());
-
-        //StartCoroutine(waitForStatistics());
+        StartCoroutine(waitForThread(seed));
     }
-
-    //private int _statisticsThreadReady = 1;
-    //private readonly Dictionary<ClueType, int> _statistics = new Dictionary<ClueType, int>();
-    //private IEnumerator waitForStatistics()
-    //{
-    //    for (var i = 0; i < Environment.ProcessorCount; i++)
-    //    {
-    //        var seed = Rnd.Range(0, int.MaxValue);
-    //        new Thread(() => GatherStatistics(seed)).Start();
-    //    }
-    //    yield return new WaitForSeconds(1f);
-    //    _statisticsThreadReady--;
-    //    yield return new WaitUntil(() => _statisticsThreadReady == 0);
-    //    File.WriteAllText(@"D:\temp\temp.txt", _statistics.OrderByDescending(p => p.Value).Select(p => string.Format("{0,25} {1} = {2,4} {3}", p.Key, _privilegedGroups.Contains(p.Key) ? "!" : " ", p.Value, new string('█', p.Value))).Join("\n"));
-    //    Debug.Log("Statistics ready");
-    //}
-
-    //private void GatherStatistics(int seed)
-    //{
-    //    _statisticsThreadReady++;
-    //    string solutionWord;
-    //    for (var iter = 0; iter < 25; iter++)
-    //    {
-    //        var clues = GeneratePuzzle(seed + iter, out solutionWord);
-    //        lock (_statistics)
-    //        {
-    //            int value;
-    //            for (var clueIx = 0; clueIx < clues.Length; clueIx++)
-    //                _statistics[clues[clueIx].Type] = _statistics.TryGetValue(clues[clueIx].Type, out value) ? value + 1 : 1;
-    //        }
-    //    }
-    //    _statisticsThreadReady--;
-    //}
 
     private KMSelectable.OnInteractHandler InputButtonPress(int i)
     {
@@ -230,9 +194,16 @@ public class PuzzwordModule : MonoBehaviour
         return false;
     }
 
-    private IEnumerator waitForThread()
+    private static int _numActiveThreads = 0;
+    private IEnumerator waitForThread(int seed)
     {
-        yield return new WaitUntil(() => _threadReady);
+        yield return new WaitForSeconds(Rnd.Range(0, 1f));
+        while (_numActiveThreads >= Environment.ProcessorCount)
+            yield return null;
+        Interlocked.Increment(ref _numActiveThreads);
+        new Thread(() => GeneratePuzzle(seed)).Start();
+        while (!_threadReady)
+            yield return null;
         foreach (var c in _puzzle.OrderByDescending(p => p.GetScreenType()))
             Debug.LogFormat("[Puzzword #{0}] Constraint: {1}", _moduleId, c);
         Debug.LogFormat(@"[Puzzword #{0}] Solution: {1}", _moduleId, _solution);
@@ -422,6 +393,7 @@ public class PuzzwordModule : MonoBehaviour
     void GeneratePuzzle(int seed)
     {
         _puzzle = GeneratePuzzle(seed, out _solution);
+        Interlocked.Decrement(ref _numActiveThreads);
         _threadReady = true;
     }
 
