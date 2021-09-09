@@ -588,6 +588,7 @@ public class PuzzwordModule : MonoBehaviour
     {
         if (Regex.IsMatch(command, @"^\s*(toggle|sw|switch|screen|page|flip|right|left|next|prev|previous)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
+            yield return null;
             yield return new List<KMSelectable> { NextButton };
             yield break;
         }
@@ -595,6 +596,7 @@ public class PuzzwordModule : MonoBehaviour
         var m = Regex.Match(command, @"^\s*(?:submit|enter|input|go)\s+([a-z]{6})\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         if (!m.Success)
             yield break;
+        yield return null;
         yield return "solve";
         yield return "strike";
         yield return TpButtonsForWord(m.Groups[1].Value.ToUpperInvariant());
