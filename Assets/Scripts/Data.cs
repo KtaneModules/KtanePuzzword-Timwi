@@ -2364,6 +2364,8 @@
             "LIVING",
             "LIZARD",
             "LIZZIE",
+            "LLAMAS",
+            "LLANOS",
             "LLOYDS",
             "LOADED",
             "LOADER",
