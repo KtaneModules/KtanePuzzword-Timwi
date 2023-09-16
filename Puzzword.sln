@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{B776D3C8-5602-09FD-B3E5-D432CE0EA29C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzword", "Puzzword.csproj", "{3DF18E23-154A-C3D7-BB9D-9CD8D4104428}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{8EBA8F43-A887-6697-0D57-AAEE27F5FE41}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puzzword-Editor", "Puzzword-Editor.csproj", "{3A459C01-D067-E8D4-FCBE-520C82228158}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,19 +11,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B776D3C8-5602-09FD-B3E5-D432CE0EA29C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B776D3C8-5602-09FD-B3E5-D432CE0EA29C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B776D3C8-5602-09FD-B3E5-D432CE0EA29C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B776D3C8-5602-09FD-B3E5-D432CE0EA29C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8EBA8F43-A887-6697-0D57-AAEE27F5FE41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8EBA8F43-A887-6697-0D57-AAEE27F5FE41}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8EBA8F43-A887-6697-0D57-AAEE27F5FE41}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8EBA8F43-A887-6697-0D57-AAEE27F5FE41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DF18E23-154A-C3D7-BB9D-9CD8D4104428}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DF18E23-154A-C3D7-BB9D-9CD8D4104428}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DF18E23-154A-C3D7-BB9D-9CD8D4104428}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DF18E23-154A-C3D7-BB9D-9CD8D4104428}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A459C01-D067-E8D4-FCBE-520C82228158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A459C01-D067-E8D4-FCBE-520C82228158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A459C01-D067-E8D4-FCBE-520C82228158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A459C01-D067-E8D4-FCBE-520C82228158}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Assembly-CSharp.csproj
+		StartupItem = Puzzword.csproj
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,10 @@
+{
+  "name": "Puzzword-Editor",
+  "references": [
+    "Puzzword"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}
